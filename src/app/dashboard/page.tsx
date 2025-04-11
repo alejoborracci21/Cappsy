@@ -1,89 +1,17 @@
 "use client"
 
 import { useState } from "react"
-import { useRouter } from "next/router"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { BarChart, Bell, Calendar, Home, LogOut, MessageSquare, Settings, User } from "lucide-react"
+import { BarChart, Bell, Calendar, MessageSquare } from "lucide-react"
 
 export default function Dashboard() {
-  const router = useRouter()
   const [activeTab, setActiveTab] = useState("metrics")
 
   return (
     <div className="flex min-h-screen bg-black text-white">
-      {/* Sidebar */}
-      <div className="hidden w-64 flex-col border-r border-gray-800 bg-gray-900 md:flex">
-        <div className="flex h-16 items-center border-b border-gray-800 px-6">
-          <h1 className="text-xl font-bold">Cappsy</h1>
-        </div>
-
-        <div className="flex flex-1 flex-col justify-between p-4">
-          <nav className="space-y-1">
-            <Button
-              variant="ghost"
-              className="w-full justify-start text-white hover:bg-gray-800"
-              onClick={() => router.push("/dashboard")}
-            >
-              <Home className="mr-2 h-5 w-5" />
-              Dashboard
-            </Button>
-            <Button
-              variant="ghost"
-              className="w-full justify-start text-white hover:bg-gray-800"
-              onClick={() => router.push("/content-generator")}
-            >
-              <MessageSquare className="mr-2 h-5 w-5" />
-              Generador
-            </Button>
-            <Button
-              variant="ghost"
-              className="w-full justify-start text-white hover:bg-gray-800"
-              onClick={() => router.push("/content-ideas")}
-            >
-              <BarChart className="mr-2 h-5 w-5" />
-              Ideas de Contenido
-            </Button>
-            <Button
-              variant="ghost"
-              className="w-full justify-start text-white hover:bg-gray-800"
-              onClick={() => router.push("/content-calendar")}
-            >
-              <Calendar className="mr-2 h-5 w-5" />
-              Calendario
-            </Button>
-          </nav>
-
-          <div className="space-y-1">
-            <Button
-              variant="ghost"
-              className="w-full justify-start text-white hover:bg-gray-800"
-              onClick={() => router.push("/profile")}
-            >
-              <User className="mr-2 h-5 w-5" />
-              Perfil
-            </Button>
-            <Button
-              variant="ghost"
-              className="w-full justify-start text-white hover:bg-gray-800"
-              onClick={() => router.push("/settings")}
-            >
-              <Settings className="mr-2 h-5 w-5" />
-              Configuración
-            </Button>
-            <Button
-              variant="ghost"
-              className="w-full justify-start text-white hover:bg-gray-800"
-              onClick={() => router.push("/")}
-            >
-              <LogOut className="mr-2 h-5 w-5" />
-              Cerrar Sesión
-            </Button>
-          </div>
-        </div>
-      </div>
 
       {/* Main content */}
       <div className="flex flex-1 flex-col">

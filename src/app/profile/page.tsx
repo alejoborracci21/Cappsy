@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { useRouter } from "next/router"
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
@@ -43,7 +43,7 @@ export default function Profile() {
             <Button
               variant="ghost"
               className="w-full justify-start text-white hover:bg-gray-800"
-              onClick={() => router.push("/content-generator")}
+              onClick={() => router.push("/content/generate")}
             >
               <MessageSquare className="mr-2 h-5 w-5" />
               Generador
@@ -51,7 +51,7 @@ export default function Profile() {
             <Button
               variant="ghost"
               className="w-full justify-start text-white hover:bg-gray-800"
-              onClick={() => router.push("/content-ideas")}
+              onClick={() => router.push("/content/ideas")}
             >
               <BarChart className="mr-2 h-5 w-5" />
               Ideas de Contenido
@@ -59,7 +59,7 @@ export default function Profile() {
             <Button
               variant="ghost"
               className="w-full justify-start text-white hover:bg-gray-800"
-              onClick={() => router.push("/content-calendar")}
+              onClick={() => router.push("/content/calendar")}
             >
               <Calendar className="mr-2 h-5 w-5" />
               Calendario

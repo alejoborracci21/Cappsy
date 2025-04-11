@@ -1,7 +1,8 @@
 "use client"
 
 import { useState } from "react"
-import { useRouter } from "next/router"
+import { useRouter } from "next/navigation";
+
 import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
@@ -36,7 +37,7 @@ export default function ContentIdeas() {
             <Button
               variant="ghost"
               className="w-full justify-start text-white hover:bg-gray-800"
-              onClick={() => router.push("/content-generator")}
+              onClick={() => router.push("/content-generate")}
             >
               <MessageSquare className="mr-2 h-5 w-5" />
               Generador
@@ -266,13 +267,13 @@ export default function ContentIdeas() {
             <Button variant="ghost" size="icon" onClick={() => router.push("/dashboard")}>
               <Home className="h-6 w-6" />
             </Button>
-            <Button variant="ghost" size="icon" onClick={() => router.push("/content-generator")}>
+            <Button variant="ghost" size="icon" onClick={() => router.push("/content/generate")}>
               <MessageSquare className="h-6 w-6" />
             </Button>
             <Button variant="ghost" size="icon" className="text-red-600">
               <BarChart className="h-6 w-6" />
             </Button>
-            <Button variant="ghost" size="icon" onClick={() => router.push("/content-calendar")}>
+            <Button variant="ghost" size="icon" onClick={() => router.push("/content/calendar")}>
               <Calendar className="h-6 w-6" />
             </Button>
           </div>

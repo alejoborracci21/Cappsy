@@ -1,58 +1,52 @@
-"use client"
+"use client";
 
-import type React from "react"
-
-import { useState } from "react"
-import { useRouter } from "next/router"
-import Link from "next/link"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { Alert, AlertDescription } from "@/components/ui/alert"
-import { Loader2 } from "lucide-react"
+import { useRouter } from "next/navigation";
+import Image from "next/image";
+import Link from "next/link";
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Loader2 } from "lucide-react";
 
 export default function Login() {
-  const router = useRouter()
-  const [email, setEmail] = useState("")
-  const [password, setPassword] = useState("")
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState("")
+  const router = useRouter();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
   const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault()
+    e.preventDefault();
 
     if (!email || !password) {
-      setError("Por favor, completa todos los campos")
-      return
+      setError("Por favor, completa todos los campos");
+      return;
     }
 
-    setLoading(true)
-    setError("")
+    setLoading(true);
+    setError("");
 
     try {
-      // Here you would integrate with Supabase auth
-      // const { error } = await supabase.auth.signIn({ email, password });
-
-      // Simulating API call
-      await new Promise((resolve) => setTimeout(resolve, 1000))
-
-      // if (error) throw error;
-
-      router.push("/dashboard")
-    } catch  {
-      setError("Error al iniciar sesión")
+      // Simulando llamada a API (aquí integras con Supabase u otro sistema de auth)
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      router.push("/dashboard");
+    } catch {
+      setError("Error al iniciar sesión");
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-black p-4">
-      <Card className="w-full max-w-md border-0 bg-gray-900 text-white">
+    <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-black via-[#121212] to-[#0f0f0f]">
+      <Card className="w-full max-w-2xl border-0 bg-gray-900 text-white">
         <CardHeader className="space-y-1">
           <div className="flex justify-center mb-4">
-            <h1 className="text-2xl font-bold text-white">Cappsy</h1>
+            {/* Se muestra el logo en vez de texto */}
+            <Image src="/logo.png" alt="Logo de Cappsy" width={200} height={200} />
           </div>
           <CardTitle className="text-2xl font-bold text-center">Iniciar Sesión</CardTitle>
           <CardDescription className="text-gray-400 text-center">
@@ -122,9 +116,9 @@ export default function Login() {
 
           <Button
             variant="outline"
-            className="w-full border-gray-700 text-white hover:bg-gray-800"
+            className="w-full border-gray-700 text-black hover:bg-gray-800"
             onClick={() => {
-              // Handle Google login
+              // Manejar inicio de sesión con Google
             }}
           >
             <svg className="mr-2 h-4 w-4" viewBox="0 0 24 24">
@@ -138,12 +132,12 @@ export default function Login() {
 
           <div className="text-center text-sm text-gray-400">
             ¿No tienes una cuenta?{" "}
-            <Link href="/register" className="font-medium text-white hover:underline">
+            <Link href="/auth/register" className="font-medium text-white hover:underline">
               Regístrate
             </Link>
           </div>
         </CardFooter>
       </Card>
     </div>
-  )
+  );
 }

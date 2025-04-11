@@ -3,7 +3,7 @@
 import type React from "react"
 
 import { useState } from "react"
-import { useRouter } from "next/router"
+import { useRouter } from "next/navigation"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -55,7 +55,7 @@ export default function Register() {
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-black p-4">
+    <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-black via-[#121212] to-[#0f0f0f]">
       <Card className="w-full max-w-md border-0 bg-gray-900 text-white">
         <CardHeader className="space-y-1">
           <div className="flex justify-center mb-4">
@@ -200,7 +200,7 @@ export default function Register() {
 
           <div className="text-center text-sm text-gray-400">
             ¿Ya tienes una cuenta?{" "}
-            <Link href="/login" className="font-medium text-white hover:underline">
+            <Link href="/auth/login" className="font-medium text-white hover:underline">
               Iniciar sesión
             </Link>
           </div>
