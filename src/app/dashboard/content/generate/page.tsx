@@ -59,7 +59,7 @@ export default function ContentGenerator() {
             <Button
               variant="ghost"
               className="w-full justify-start bg-gray-800 text-white"
-              onClick={() => router.push("/content/generate")}
+              onClick={() => router.push("/dashboard/content/generate")}
             >
               <MessageSquare className="mr-2 h-5 w-5" />
               Generador
@@ -67,7 +67,7 @@ export default function ContentGenerator() {
             <Button
               variant="ghost"
               className="w-full justify-start text-white hover:bg-gray-800"
-              onClick={() => router.push("/content/ideas")}
+              onClick={() => router.push("/dashboard/content/ideas")}
             >
               <BarChart className="mr-2 h-5 w-5" />
               Ideas de Contenido
@@ -75,7 +75,7 @@ export default function ContentGenerator() {
             <Button
               variant="ghost"
               className="w-full justify-start text-white hover:bg-gray-800"
-              onClick={() => router.push("/content/calendar")}
+              onClick={() => router.push("/dashboard/content/calendar")}
             >
               <Calendar className="mr-2 h-5 w-5" />
               Calendario

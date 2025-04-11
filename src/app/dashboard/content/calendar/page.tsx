@@ -52,7 +52,7 @@ export default function ContentCalendar() {
             <Button
               variant="ghost"
               className="w-full justify-start text-white hover:bg-gray-800"
-              onClick={() => router.push("/content/ideas")}
+              onClick={() => router.push("/dashboard/content/ideas")}
             >
               <BarChart className="mr-2 h-5 w-5" />
               Ideas de Contenido
@@ -60,7 +60,7 @@ export default function ContentCalendar() {
             <Button
               variant="ghost"
               className="w-full justify-start bg-gray-800 text-white"
-              onClick={() => router.push("/content/calendar")}
+              onClick={() => router.push("/dashboard/content/calendar")}
             >
               <Calendar className="mr-2 h-5 w-5" />
               Calendario
@@ -184,7 +184,7 @@ export default function ContentCalendar() {
             <Button variant="ghost" size="icon" onClick={() => router.push("/content/generator")}>
               <MessageSquare className="h-6 w-6" />
             </Button>
-            <Button variant="ghost" size="icon" onClick={() => router.push("/content/ideas")}>
+            <Button variant="ghost" size="icon" onClick={() => router.push("/dashboard/content/ideas")}>
               <BarChart className="h-6 w-6" />
             </Button>
             <Button variant="ghost" size="icon" className="text-red-600">
