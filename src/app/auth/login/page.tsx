@@ -3,40 +3,48 @@
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { useState, FormEvent } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Loader2 } from "lucide-react";
+import { supabase } from "@/lib/supabaseClient"; // Verifica que la ruta sea correcta
 
 export default function Login() {
   const router = useRouter();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string>("");
 
-  const handleLogin = async (e: React.FormEvent) => {
+  const handleLogin = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
-
-    if (!email || !password) {
-      setError("Por favor, completa todos los campos");
-      return;
-    }
-
-    setLoading(true);
     setError("");
+    setLoading(true);
 
-    try {
-      // Simulando llamada a API (aquí integras con Supabase u otro sistema de auth)
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+    // Usamos signInWithPassword en lugar de signIn
+    const { error: loginError, data } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
+
+    setLoading(false);
+
+    if (loginError) {
+      setError(loginError.message);
+    } else {
+      console.log("Usuario autenticado", data);
+      // Redirige a la ruta deseada, por ejemplo "/dashboard"
       router.push("/dashboard");
-    } catch {
-      setError("Error al iniciar sesión");
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -44,11 +52,17 @@ export default function Login() {
     <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-black via-[#121212] to-[#0f0f0f]">
       <Card className="w-full max-w-2xl border-0 bg-gray-900 text-white">
         <CardHeader className="space-y-1">
-          <div className="flex justify-center mb-4">
-            {/* Se muestra el logo en vez de texto */}
-            <Image src="/logo.png" alt="Logo de Cappsy" width={200} height={200} />
+          <div className="flex justify-center">
+            <Image
+              src="/logo.png"
+              alt="Logo de Cappsy"
+              width={200}
+              height={200}
+            />
           </div>
-          <CardTitle className="text-2xl font-bold text-center">Iniciar Sesión</CardTitle>
+          <CardTitle className="text-2xl font-bold text-center">
+            Iniciar Sesión
+          </CardTitle>
           <CardDescription className="text-gray-400 text-center">
             Ingresa tus credenciales para acceder a tu cuenta
           </CardDescription>
@@ -59,7 +73,6 @@ export default function Login() {
               <AlertDescription>{error}</AlertDescription>
             </Alert>
           )}
-
           <form onSubmit={handleLogin} className="space-y-4">
             <div className="space-y-2">
               <Label htmlFor="email" className="text-white">
@@ -75,13 +88,15 @@ export default function Login() {
                 required
               />
             </div>
-
             <div className="space-y-2">
               <div className="flex items-center justify-between">
                 <Label htmlFor="password" className="text-white">
                   Contraseña
                 </Label>
-                <Link href="/forgot-password" className="text-sm text-gray-400 hover:text-white">
+                <Link
+                  href="/forgot-password"
+                  className="text-sm text-gray-400 hover:text-white"
+                >
                   ¿Olvidaste tu contraseña?
                 </Link>
               </div>
@@ -94,8 +109,11 @@ export default function Login() {
                 required
               />
             </div>
-
-            <Button type="submit" className="w-full bg-red-600 text-white hover:bg-red-700" disabled={loading}>
+            <Button
+              type="submit"
+              className="w-full bg-red-600 text-white hover:bg-red-700"
+              disabled={loading}
+            >
               {loading ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -108,31 +126,12 @@ export default function Login() {
           </form>
         </CardContent>
         <CardFooter className="flex flex-col space-y-4">
-          <div className="relative flex items-center w-full">
-            <div className="flex-grow border-t border-gray-700"></div>
-            <span className="mx-4 flex-shrink text-gray-400">o continúa con</span>
-            <div className="flex-grow border-t border-gray-700"></div>
-          </div>
-
-          <Button
-            variant="outline"
-            className="w-full border-gray-700 text-black hover:bg-gray-800"
-            onClick={() => {
-              // Manejar inicio de sesión con Google
-            }}
-          >
-            <svg className="mr-2 h-4 w-4" viewBox="0 0 24 24">
-              <path
-                fill="currentColor"
-                d="M12.545,10.239v3.821h5.445c-0.712,2.315-2.647,3.972-5.445,3.972c-3.332,0-6.033-2.701-6.033-6.032s2.701-6.032,6.033-6.032c1.498,0,2.866,0.549,3.921,1.453l2.814-2.814C17.503,2.988,15.139,2,12.545,2C7.021,2,2.543,6.477,2.543,12s4.478,10,10.002,10c8.396,0,10.249-7.85,9.426-11.748L12.545,10.239z"
-              />
-            </svg>
-            Continuar con Google
-          </Button>
-
           <div className="text-center text-sm text-gray-400">
             ¿No tienes una cuenta?{" "}
-            <Link href="/auth/register" className="font-medium text-white hover:underline">
+            <Link
+              href="/auth/register"
+              className="font-medium text-white hover:underline"
+            >
               Regístrate
             </Link>
           </div>

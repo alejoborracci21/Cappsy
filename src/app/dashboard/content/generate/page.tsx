@@ -40,61 +40,7 @@ export default function ContentGenerator() {
 
   return (
     <div className="flex min-h-screen bg-black text-white">
-      {/* Sidebar - same as dashboard */}
-      <div className="hidden w-64 flex-col border-r border-gray-800 bg-gray-900 md:flex">
-        <div className="flex h-16 items-center border-b border-gray-800 px-6">
-          <h1 className="text-xl font-bold">Cappsy</h1>
-        </div>
-
-        <div className="flex flex-1 flex-col justify-between p-4">
-          <nav className="space-y-1">
-            <Button
-              variant="ghost"
-              className="w-full justify-start text-white hover:bg-gray-800"
-              onClick={() => router.push("/dashboard")}
-            >
-              <Home className="mr-2 h-5 w-5" />
-              Dashboard
-            </Button>
-            <Button
-              variant="ghost"
-              className="w-full justify-start bg-gray-800 text-white"
-              onClick={() => router.push("/dashboard/content/generate")}
-            >
-              <MessageSquare className="mr-2 h-5 w-5" />
-              Generador
-            </Button>
-            <Button
-              variant="ghost"
-              className="w-full justify-start text-white hover:bg-gray-800"
-              onClick={() => router.push("/dashboard/content/ideas")}
-            >
-              <BarChart className="mr-2 h-5 w-5" />
-              Ideas de Contenido
-            </Button>
-            <Button
-              variant="ghost"
-              className="w-full justify-start text-white hover:bg-gray-800"
-              onClick={() => router.push("/dashboard/content/calendar")}
-            >
-              <Calendar className="mr-2 h-5 w-5" />
-              Calendario
-            </Button>
-          </nav>
-
-          <div className="space-y-1">
-            <Button
-              variant="ghost"
-              className="w-full justify-start text-white hover:bg-gray-800"
-              onClick={() => router.push("/settings")}
-            >
-              <Settings className="mr-2 h-5 w-5" />
-              Configuración
-            </Button>
-          </div>
-        </div>
-      </div>
-
+      
       {/* Main content */}
       <div className="flex flex-1 flex-col">
         {/* Header */}
