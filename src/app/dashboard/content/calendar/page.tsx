@@ -1,145 +1,129 @@
 "use client"
 
-import { useState } from "react"
-import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react"
+import { parseISO, isSameDay } from "date-fns"
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs"
+import { useUser } from "@supabase/auth-helpers-react"
+import { Database } from "@/types/supabase"
+import { CalendarIcon } from "lucide-react"
 
-import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Bell, Calendar, Home, MessageSquare, BarChart, Settings, ChevronLeft, ChevronRight, Edit } from "lucide-react"
+import CalendarGrid from "@/components/CalendarGrid"
+import EventsSidebar from "@/components/EventsSidebar"
+import AddEventModal from "@/components/AddEventModal"
 
-export default function ContentCalendar() {
-  const router = useRouter()
-  const [currentMonth, setCurrentMonth] = useState("Octubre 2023")
+interface SupabaseEvent {
+  id: string
+  title: string
+  scheduled_date: string
+}
 
-  // Example calendar data
-  const days = Array.from({ length: 31 }, (_, i) => i + 1)
-  const startDay = 0 // Sunday
-  const daysInMonth = 31
+interface Event {
+  id: string
+  title: string
+  date: Date
+}
 
-  // Example events
-  const events = [
-    { id: 1, title: "Launch Blog Post", date: "Oct 3, 2023" },
-    { id: 2, title: "Team Meeting", date: "Oct 5, 2023" },
-  ]
+export default function CalendarPage() {
+  const supabase = createClientComponentClient<Database>()
+  const user = useUser()
+  const [events, setEvents] = useState<Event[]>([])
+  const [selectedDate, setSelectedDate] = useState<Date>(new Date())
+  const [newEventTitle, setNewEventTitle] = useState("")
+  const [isAddEventOpen, setIsAddEventOpen] = useState(false)
+  const [currentMonth, setCurrentMonth] = useState(new Date())
+
+  const fetchEvents = async () => {
+    if (!user?.id) return
+    const { data, error } = await supabase
+      .from("posts_schedule")
+      .select("*")
+      .eq("user_id", user.id)
+      .order("scheduled_date", { ascending: true })
+
+    if (error) return console.error("Error al traer eventos:", error)
+
+    const mapped =
+      data?.map((e: SupabaseEvent): Event => ({
+        id: e.id,
+        title: e.title,
+        date: parseISO(e.scheduled_date),
+      })) || []
+
+    setEvents(mapped)
+  }
+
+  useEffect(() => {
+    fetchEvents()
+  }, [user])
+
+  const handleAddEvent = async () => {
+    console.log("Adding event:", newEventTitle, selectedDate, user?.id)
+    if (!selectedDate || !newEventTitle.trim() || !user?.id) return
+    const { error } = await supabase.from("posts_schedule").insert({
+      title: newEventTitle,
+      scheduled_date: selectedDate.toISOString(),
+      user_id: user.id,
+    })
+
+    if (error) {
+      alert("Error al guardar evento")
+      console.error(error)
+    } else {
+      fetchEvents()
+      setNewEventTitle("")
+      setIsAddEventOpen(false)
+    }
+  }
+
+  const handleDeleteEvent = async (id: string) => {
+    const { error } = await supabase.from("posts_schedule").delete().eq("id", id)
+
+    if (error) {
+      alert("Error al eliminar evento")
+      console.error(error)
+    } else {
+      fetchEvents()
+    }
+  }
 
   return (
-    <div className="flex min-h-screen bg-black text-white">
-      
-
-      {/* Main content */}
-      <div className="flex flex-1 flex-col">
-        {/* Header */}
-        <header className="flex h-16 items-center justify-between border-b border-gray-800 bg-gray-900 px-6">
-          <div className="md:hidden">
-            <h1 className="text-xl font-bold">Cappsy</h1>
-          </div>
-
-          <div className="flex items-center space-x-4">
-            <Button variant="ghost" size="icon" className="text-white">
-              <Bell className="h-5 w-5" />
-            </Button>
-            <Avatar>
-              <AvatarImage src="/placeholder.svg?height=32&width=32" alt="User" />
-              <AvatarFallback className="bg-red-600">US</AvatarFallback>
-            </Avatar>
-          </div>
-        </header>
-
-        {/* Content Calendar */}
-        <main className="flex-1 overflow-auto p-6">
-          <div className="mb-6 flex items-center justify-between">
-            <h1 className="text-3xl font-bold">Calendario de Contenido</h1>
-            <Button className="bg-red-600 text-white hover:bg-red-700">Nuevo Evento</Button>
-          </div>
-
-          <Card className="border-0 bg-gray-900">
-            <CardContent className="p-6">
-              <div className="mb-4 flex items-center justify-between">
-                <div className="flex items-center space-x-2">
-                  <Button variant="ghost" size="icon" className="text-white">
-                    <ChevronLeft className="h-5 w-5" />
-                  </Button>
-                  <h2 className="text-xl font-bold">{currentMonth}</h2>
-                  <Button variant="ghost" size="icon" className="text-white">
-                    <ChevronRight className="h-5 w-5" />
-                  </Button>
-                </div>
-              </div>
-
-              <div className="mb-4 grid grid-cols-7 gap-1 text-center text-sm font-medium">
-                {["Dom", "Lun", "Mar", "Mié", "Jue", "Vie", "Sáb"].map((day) => (
-                  <div key={day} className="py-2">
-                    {day}
-                  </div>
-                ))}
-              </div>
-
-              <div className="grid grid-cols-7 gap-1">
-                {Array.from({ length: startDay }).map((_, index) => (
-                  <div key={`empty-${index}`} className="h-14 rounded-md p-1"></div>
-                ))}
-
-                {days.slice(0, daysInMonth).map((day) => {
-                  const isToday = day === 4 // Example: 4th is today
-                  const hasEvent = day === 3 || day === 5
-
-                  return (
-                    <div
-                      key={day}
-                      className={`h-14 rounded-md p-1 ${
-                        isToday ? "bg-red-600/20 ring-1 ring-red-600" : "hover:bg-gray-800"
-                      }`}
-                    >
-                      <div className="flex h-full flex-col">
-                        <span className={`text-sm ${isToday ? "font-bold text-red-600" : ""}`}>{day}</span>
-                        {hasEvent && <div className="mt-1 h-1.5 w-1.5 rounded-full bg-red-600"></div>}
-                      </div>
-                    </div>
-                  )
-                })}
-              </div>
-
-              <div className="mt-6">
-                <h3 className="mb-4 text-lg font-bold">Próximos Eventos</h3>
-
-                <div className="space-y-3">
-                  {events.map((event) => (
-                    <div
-                      key={event.id}
-                      className="flex items-center justify-between rounded-lg border border-gray-800 bg-gray-800/50 p-3"
-                    >
-                      <div>
-                        <h4 className="font-medium">{event.title}</h4>
-                        <p className="text-sm text-gray-400">{event.date}</p>
-                      </div>
-                      <Button variant="ghost" size="icon" className="text-white">
-                        <Edit className="h-4 w-4" />
-                      </Button>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Bottom Navigation for Mobile */}
-          <div className="fixed bottom-0 left-0 right-0 flex justify-around border-t border-gray-800 bg-gray-900 p-3 md:hidden">
-            <Button variant="ghost" size="icon" onClick={() => router.push("/dashboard")}>
-              <Home className="h-6 w-6" />
-            </Button>
-            <Button variant="ghost" size="icon" onClick={() => router.push("/content/generator")}>
-              <MessageSquare className="h-6 w-6" />
-            </Button>
-            <Button variant="ghost" size="icon" onClick={() => router.push("/dashboard/content/ideas")}>
-              <BarChart className="h-6 w-6" />
-            </Button>
-            <Button variant="ghost" size="icon" className="text-red-600">
-              <Calendar className="h-6 w-6" />
-            </Button>
-          </div>
-        </main>
+    <div className="flex flex-col h-full min-h-[calc(100vh-80px)]">
+      <div className="flex items-center justify-between p-4 border-b border-slate-700/30">
+        <h1 className="text-2xl font-bold flex items-center gap-2">
+          <CalendarIcon className="h-6 w-6 text-red-500" />
+          Calendario de publicaciones
+        </h1>
+        <p className="text-slate-400">Planifica y organiza tus publicaciones en el calendario</p>
       </div>
+
+      <div className="flex flex-1 p-4 gap-4">
+        <CalendarGrid
+          currentMonth={currentMonth}
+          setCurrentMonth={setCurrentMonth}
+          selectedDate={selectedDate}
+          setSelectedDate={setSelectedDate}
+          setIsAddEventOpen={setIsAddEventOpen}
+          events={events}
+        />
+
+        <EventsSidebar
+          currentMonthEvents={events.filter(e => e.date.getMonth() === currentMonth.getMonth())}
+          setSelectedDate={setSelectedDate}
+          setIsAddEventOpen={setIsAddEventOpen}
+          handleDeleteEvent={handleDeleteEvent}
+        />
+      </div>
+
+      <AddEventModal
+        open={isAddEventOpen}
+        onOpenChange={setIsAddEventOpen}
+        selectedDate={selectedDate}
+        newEventTitle={newEventTitle}
+        setNewEventTitle={setNewEventTitle}
+        selectedDateEvents={events.filter(e => isSameDay(e.date, selectedDate))}
+        handleAddEvent={handleAddEvent}
+        handleDeleteEvent={handleDeleteEvent}
+      />
     </div>
   )
 }

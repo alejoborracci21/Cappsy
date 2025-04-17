@@ -1,12 +1,13 @@
-"use client";
+"use client"
 
-import { useRouter } from "next/navigation";
-import Image from "next/image";
-import Link from "next/link";
-import { useState, FormEvent } from "react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { useRouter } from "next/navigation"
+import Image from "next/image"
+import Link from "next/link"
+import { useState, FormEvent } from "react"
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
 import {
   Card,
   CardContent,
@@ -14,39 +15,37 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
-import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Loader2 } from "lucide-react";
-import { supabase } from "@/lib/supabaseClient"; // Verifica que la ruta sea correcta
+} from "@/components/ui/card"
+import { Alert, AlertDescription } from "@/components/ui/alert"
+import { Loader2 } from "lucide-react"
 
 export default function Login() {
-  const router = useRouter();
-  const [email, setEmail] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
-  const [loading, setLoading] = useState<boolean>(false);
-  const [error, setError] = useState<string>("");
+  const router = useRouter()
+  const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState("")
 
-  const handleLogin = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
-    e.preventDefault();
-    setError("");
-    setLoading(true);
+  const supabase = createClientComponentClient()
 
-    // Usamos signInWithPassword en lugar de signIn
-    const { error: loginError, data } = await supabase.auth.signInWithPassword({
+  const handleLogin = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    setError("")
+    setLoading(true)
+
+    const { error: loginError } = await supabase.auth.signInWithPassword({
       email,
       password,
-    });
+    })
 
-    setLoading(false);
+    setLoading(false)
 
     if (loginError) {
-      setError(loginError.message);
+      setError(loginError.message)
     } else {
-      console.log("Usuario autenticado", data);
-      // Redirige a la ruta deseada, por ejemplo "/dashboard"
-      router.push("/dashboard");
+      router.push("/dashboard")
     }
-  };
+  }
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-black via-[#121212] to-[#0f0f0f]">
@@ -75,9 +74,7 @@ export default function Login() {
           )}
           <form onSubmit={handleLogin} className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="email" className="text-white">
-                Email
-              </Label>
+              <Label htmlFor="email" className="text-white">Email</Label>
               <Input
                 id="email"
                 type="email"
@@ -90,13 +87,8 @@ export default function Login() {
             </div>
             <div className="space-y-2">
               <div className="flex items-center justify-between">
-                <Label htmlFor="password" className="text-white">
-                  Contraseña
-                </Label>
-                <Link
-                  href="/forgot-password"
-                  className="text-sm text-gray-400 hover:text-white"
-                >
+                <Label htmlFor="password" className="text-white">Contraseña</Label>
+                <Link href="/forgot-password" className="text-sm text-gray-400 hover:text-white">
                   ¿Olvidaste tu contraseña?
                 </Link>
               </div>
@@ -128,15 +120,12 @@ export default function Login() {
         <CardFooter className="flex flex-col space-y-4">
           <div className="text-center text-sm text-gray-400">
             ¿No tienes una cuenta?{" "}
-            <Link
-              href="/auth/register"
-              className="font-medium text-white hover:underline"
-            >
+            <Link href="/auth/register" className="font-medium text-white hover:underline">
               Regístrate
             </Link>
           </div>
         </CardFooter>
       </Card>
     </div>
-  );
+  )
 }

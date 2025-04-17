@@ -11,7 +11,7 @@ export default function Dashboard() {
   const [activeTab, setActiveTab] = useState("metrics")
 
   return (
-    <div className="flex min-h-screen bg-black text-white">
+    <div className="flex min-h-screen text-white">
 
       {/* Main content */}
       <div className="flex flex-1 flex-col">
