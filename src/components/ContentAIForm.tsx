@@ -7,8 +7,11 @@ import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Loader2 } from "lucide-react"
 import { generateContentIdea } from "@/lib/ai/generateContent"
+import { useUser } from "@supabase/auth-helpers-react"
+import { saveIdeaToSupabase } from "@/lib/supabase/ideas"
 
 export default function ContentAIForm() {
+  const user = useUser()
   const [platform, setPlatform] = useState("Instagram")
   const [niche, setNiche] = useState("")
   const [style, setStyle] = useState("informativo")
@@ -18,17 +21,21 @@ export default function ContentAIForm() {
   const handleGenerate = async () => {
     setLoading(true)
     setResult("")
-  
+
     const prompt = `Genera 3 ideas de contenido para un influencer de ${niche} en ${platform} con un estilo ${style}. Escribilas en español, deben ser creativas, virales y breves.`
 
     try {
       const generated = await generateContentIdea(prompt)
       console.log("Generated content:", generated)
-      setResult(generated.result) // <--- Asegurate de acceder a .result
+      setResult(generated.result)
+
+      if (user?.id) {
+        await saveIdeaToSupabase(generated.result, user.id, niche)
+      }
     } catch {
       setResult("Error al generar contenido.")
     }
-  
+
     setLoading(false)
   }
 
@@ -40,7 +47,7 @@ export default function ContentAIForm() {
           <Input value={platform} onChange={(e) => setPlatform(e.target.value)} placeholder="Instagram o TikTok" />
         </div>
         <div className="space-y-2">
-          <Label>Nicho</Label>
+          <Label>Tipo de contenido</Label>
           <Input value={niche} onChange={(e) => setNiche(e.target.value)} placeholder="Fitness, moda, educación..." />
         </div>
         <div className="space-y-2">
