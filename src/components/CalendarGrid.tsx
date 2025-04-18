@@ -97,7 +97,7 @@ export default function CalendarGrid({
                 }}
                 className={`h-16 p-1 rounded-md flex flex-col items-center justify-start relative transition-colors
                   ${isToday ? "bg-slate-700/70 font-bold" : ""}
-                  ${isSelected ? "bg-purple-500/10 border border-purple-500/20" : ""}
+                  ${isSelected ? "bg-red-500/10 border border-white" : ""}
                   ${!isCurrentMonth ? "opacity-40" : "hover:bg-slate-700/50"}`}
               >
                 <span className={`text-sm w-7 h-7 flex items-center justify-center rounded-full
@@ -108,12 +108,12 @@ export default function CalendarGrid({
                 {dayEvents.length > 0 && (
                   <div className="absolute bottom-1 left-1/2 transform -translate-x-1/2 flex gap-0.5">
                     {dayEvents.length > 3 ? (
-                      <div className="text-[8px] px-1 py-0 bg-purple-500/20 text-purple-300 rounded-full">
+                      <div className="text-[8px] px-1 py-0 bg-red-500/20 text-red-300 rounded-full">
                         {dayEvents.length}
                       </div>
                     ) : (
                       dayEvents.map((_, i) => (
-                        <div key={i} className="w-1.5 h-1.5 rounded-full bg-purple-500" />
+                        <div key={i} className="w-1.5 h-1.5 rounded-full bg-red-500" />
                       ))
                     )}
                   </div>

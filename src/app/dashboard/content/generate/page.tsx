@@ -5,8 +5,7 @@ import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Textarea } from "@/components/ui/textarea"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Bell, Calendar, Copy, Home, MessageSquare, BarChart, Settings } from "lucide-react"
+import { Calendar, Copy, Home, MessageSquare, BarChart } from "lucide-react"
 
 export default function ContentGenerator() {
   const router = useRouter()
@@ -39,26 +38,10 @@ export default function ContentGenerator() {
   }
 
   return (
-    <div className="flex min-h-screen bg-black text-white">
+    <div className="flex min-h-screen text-white">
       
       {/* Main content */}
       <div className="flex flex-1 flex-col">
-        {/* Header */}
-        <header className="flex h-16 items-center justify-between border-b border-gray-800 bg-gray-900 px-6">
-          <div className="md:hidden">
-            <h1 className="text-xl font-bold">Cappsy</h1>
-          </div>
-
-          <div className="flex items-center space-x-4">
-            <Button variant="ghost" size="icon" className="text-white">
-              <Bell className="h-5 w-5" />
-            </Button>
-            <Avatar>
-              <AvatarImage src="/placeholder.svg?height=32&width=32" alt="User" />
-              <AvatarFallback className="bg-red-600">US</AvatarFallback>
-            </Avatar>
-          </div>
-        </header>
 
         {/* Content Generator */}
         <main className="flex-1 overflow-auto p-6">

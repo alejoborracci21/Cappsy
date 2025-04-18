@@ -57,7 +57,6 @@ export default function CalendarPage() {
   }, [user])
 
   const handleAddEvent = async () => {
-    console.log("Adding event:", newEventTitle, selectedDate, user?.id)
     if (!selectedDate || !newEventTitle.trim() || !user?.id) return
     const { error } = await supabase.from("posts_schedule").insert({
       title: newEventTitle,
