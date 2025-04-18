@@ -22,7 +22,7 @@ export default function ContentAIForm() {
     setLoading(true)
     setResult("")
 
-    const prompt = `Genera 3 ideas de contenido para un influencer de ${niche} en ${platform} con un estilo ${style}. Escribilas en español, deben ser creativas, virales y breves.`
+    const prompt = `Genera 3 ideas de contenido originales, creativas y con potencial viral en español para un influencer especializado en ${niche} en la plataforma ${platform}. Las ideas deben seguir un estilo ${style}, ser breves, atractivas y fáciles de adaptar.`
 
     try {
       const generated = await generateContentIdea(prompt)
