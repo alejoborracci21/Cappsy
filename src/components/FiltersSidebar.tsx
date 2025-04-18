@@ -78,7 +78,7 @@ export default function FiltersSidebar({ popularityValue, setPopularityValue }: 
         <div className="mb-8 space-y-4 rounded-lg border border-gray-800 bg-gray-800/30 p-4">
           <div className="flex items-center justify-between">
             <Label htmlFor="nicho" className="text-sm font-medium text-gray-300">
-              Nicho
+              Tipo de contenido
             </Label>
             <Switch id="nicho" className="data-[state=checked]:bg-red-600" />
           </div>

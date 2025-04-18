@@ -3,7 +3,7 @@
 
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import { Home, MessageSquare, BarChart, Calendar, Settings, Bookmark } from "lucide-react";
+import { Home, BarChart, Calendar, Settings, Bookmark } from "lucide-react";
 
 import Image from "next/image";
 
@@ -18,6 +18,10 @@ export default function Sidebar() {
 
       <div className="flex flex-1 flex-col justify-between p-4">
         <nav className="space-y-1">
+
+
+
+          {/* Dashboard */}
           <Button
             variant="ghost"
             className="w-full justify-start text-white hover:bg-gray-800"
@@ -26,30 +30,31 @@ export default function Sidebar() {
             <Home className="mr-2 h-5 w-5" />
             Dashboard
           </Button>
-          <Button
-            variant="ghost"
-            className="w-full justify-start text-white hover:bg-gray-800"
-            onClick={() => router.push("/dashboard/content/generate")}
-          >
-            <MessageSquare className="mr-2 h-5 w-5" />
-            Generador
-          </Button>
+
+
+          {/* Generar ideas con IA */}
           <Button
             variant="ghost"
             className="w-full justify-start text-white hover:bg-gray-800"
             onClick={() => router.push("/dashboard/content/ideas")}
           >
             <BarChart className="mr-2 h-5 w-5" />
-            Ideas de Contenido
+            Generar ideas con IA
           </Button>
+
+
+          {/* Historial de ideas */}
           <Button
             variant="ghost"
             className="w-full justify-start text-white hover:bg-gray-800"
             onClick={() => router.push("/dashboard/content/saved")}
           >
             <Bookmark className="mr-2 h-5 w-5" />
-            Ideas guardadas
+            Historial de ideas
           </Button>
+
+
+          {/* Calendario */}
           <Button
             variant="ghost"
             className="w-full justify-start text-white hover:bg-gray-800"
