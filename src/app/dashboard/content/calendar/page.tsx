@@ -10,27 +10,32 @@ import { CalendarIcon } from "lucide-react"
 import CalendarGrid from "@/components/CalendarGrid"
 import EventsSidebar from "@/components/EventsSidebar"
 import AddEventModal from "@/components/AddEventModal"
+import EventDetailsDialog from "@/components/EventDetailsDialog"
 
 interface SupabaseEvent {
   id: string
   title: string
+  description?: string
   scheduled_date: string
 }
 
 interface Event {
   id: string
   title: string
+  description?: string
   date: Date
 }
 
 export default function CalendarPage() {
   const supabase = createClientComponentClient<Database>()
   const user = useUser()
+
   const [events, setEvents] = useState<Event[]>([])
   const [selectedDate, setSelectedDate] = useState<Date>(new Date())
   const [newEventTitle, setNewEventTitle] = useState("")
   const [isAddEventOpen, setIsAddEventOpen] = useState(false)
   const [currentMonth, setCurrentMonth] = useState(new Date())
+  const [selectedEvent, setSelectedEvent] = useState<Event | null>(null)
 
   const fetchEvents = async () => {
     if (!user?.id) return
@@ -46,6 +51,7 @@ export default function CalendarPage() {
       data?.map((e: SupabaseEvent): Event => ({
         id: e.id,
         title: e.title,
+        description: e.description || "",
         date: parseISO(e.scheduled_date),
       })) || []
 
@@ -110,6 +116,7 @@ export default function CalendarPage() {
           setSelectedDate={setSelectedDate}
           setIsAddEventOpen={setIsAddEventOpen}
           handleDeleteEvent={handleDeleteEvent}
+          setSelectedEvent={setSelectedEvent} // 👈 NUEVO
         />
       </div>
 
@@ -123,6 +130,15 @@ export default function CalendarPage() {
         handleAddEvent={handleAddEvent}
         handleDeleteEvent={handleDeleteEvent}
       />
+
+      {/* 👇 Dialog de detalles del evento */}
+      {selectedEvent && (
+        <EventDetailsDialog
+          event={selectedEvent}
+          open={!!selectedEvent}
+          onClose={() => setSelectedEvent(null)}
+        />
+      )}
     </div>
   )
 }
